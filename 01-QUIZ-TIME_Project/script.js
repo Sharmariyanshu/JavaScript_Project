@@ -1,4 +1,3 @@
-
 // DOM Elements
 const startScreen = document.getElementById("start-screen");
 const quizScreen = document.getElementById("quiz-screen");
@@ -48,7 +47,7 @@ const quizQuestions = [
     ],
   },
   {
-    question: "Why is jaipur known as the Pink City?",
+    question: "Why is Jaipur known as the Pink City?",
     answers: [
       { text: "City of roses", correct: false },
       { text: "Pink stoned mined locally", correct: false },
@@ -76,20 +75,26 @@ let answersDisabled = false;
 totalQuestionsSpan.textContent = quizQuestions.length;
 maxScoreSpan.textContent = quizQuestions.length;
 
-// Event Listeners
-startButton.addEventListener("click", startQuiz);
-restartButton.addEventListener("click", restartQuiz);
-themeToggle.addEventListener("click", toggleTheme);
-
-// Check for saved theme preference
-window.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("theme") === "dark") {
+// Theme Preference Setup
+document.addEventListener("DOMContentLoaded", () => {
+  const prefersDark = localStorage.getItem("theme") === "dark";
+  if (prefersDark) {
     document.body.classList.add("dark");
-    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    themeToggle.checked = true;
   }
 });
 
-// Functions
+// Theme Toggle
+themeToggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
+// Event Listeners
+startButton.addEventListener("click", startQuiz);
+restartButton.addEventListener("click", restartQuiz);
+
 function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
@@ -108,9 +113,7 @@ function showQuestion() {
 
   questionText.textContent = currentQuestion.question;
   currentQuestionSpan.textContent = currentQuestionIndex + 1;
-  progressBar.style.width = `${
-    (currentQuestionIndex / quizQuestions.length) * 100
-  }%`;
+  progressBar.style.width = `${(currentQuestionIndex / quizQuestions.length) * 100}%`;
   answersContainer.innerHTML = "";
 
   currentQuestion.answers.forEach((answer) => {
@@ -130,7 +133,6 @@ function selectAnswer(e) {
   const selected = e.target;
   const correct = selected.dataset.correct === "true";
 
-  // Highlight correct/incorrect answers
   Array.from(answersContainer.children).forEach((btn) => {
     if (btn.dataset.correct === "true") {
       btn.classList.add("correct");
@@ -139,13 +141,11 @@ function selectAnswer(e) {
     }
   });
 
-  // Update score if correct
   if (correct) {
     score++;
     scoreSpan.textContent = score;
   }
 
-  // Move to next question or show results
   setTimeout(() => {
     currentQuestionIndex++;
     if (currentQuestionIndex < quizQuestions.length) {
@@ -161,7 +161,6 @@ function showResults() {
   resultScreen.classList.add("active");
   finalScoreSpan.textContent = score;
 
-  // Calculate percentage and show appropriate message
   const percentage = (score / quizQuestions.length) * 100;
   if (percentage === 100) {
     resultMessage.textContent = "Perfect! You're a genius! 🎯";
@@ -181,23 +180,4 @@ function showResults() {
 function restartQuiz() {
   resultScreen.classList.remove("active");
   startQuiz();
-}
-
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-  const isDarkMode = document.body.classList.contains("dark");
-
-  // Save preference to localStorage
-  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-
-  // Change icon
-  themeToggle.innerHTML = isDarkMode
-    ? '<i class="fas fa-sun"></i>'
-    : '<i class="fas fa-moon"></i>';
-
-  // Add animation class
-  themeToggle.classList.add("theme-toggle-animate");
-  setTimeout(() => {
-    themeToggle.classList.remove("theme-toggle-animate");
-  }, 300);
 }

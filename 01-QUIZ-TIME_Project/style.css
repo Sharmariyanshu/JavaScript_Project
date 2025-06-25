@@ -1,15 +1,16 @@
-
-/* BASE STYLES */
 :root {
-  --primary: #6e45e2;
-  --secondary: #88d3ce;
-  --accent: #ff7eb3;
-  --text-light: #f8f9fa;
-  --text-dark: #76818b;
-  --bg-gradient: linear-gradient(135deg, #e2cd45 0%, #88d3ce 100%);
-  --bg-dark: linear-gradient(255deg, #1104ff 50%, #331b73 100%);
-  --card-bg: rgba(255, 255, 255, 0.9);
-  --card-dark: rgba(38, 38, 39, 0.9);
+  --primary: #ff85a2;
+  --accent: #ff6ac1;
+  --bg-light: #fff1f7;
+  --bg-dark: linear-gradient(135deg, #1a1b2f, #23243b);
+  --text-light: #f0f0f5;
+  --text-dark: #333333;
+  --card-light: #ffffff;
+  --card-dark: #2d2e4a;
+  --btn-light: #ff5c8a;
+  --btn-dark: #7f5af0;
+  --correct: #28a745;
+  --incorrect: #dc3545;
 }
 
 * {
@@ -20,14 +21,13 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: var(--bg-gradient);
+  background: var(--bg-light);
+  color: var(--text-dark);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.5s ease;
-  color: var(--text-dark);
-  position: relative;
 }
 
 body.dark {
@@ -43,52 +43,75 @@ body.dark {
   z-index: 1000;
 }
 
-.theme-toggle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border: none;
-  cursor: pointer;
+.theme-switch {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
-.theme-toggle i {
-  font-size: 1.5rem;
+.theme-switch input {
+  display: none;
+}
+
+.theme-switch .slider {
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 30px;
+  position: relative;
+  transition: background-color 0.4s;
+  box-shadow: inset 0 0 4px #aaa;
+}
+
+.theme-switch .slider::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.4s ease, background-color 0.4s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.theme-switch input:checked + .slider {
+  background-color: var(--accent);
+}
+
+.theme-switch input:checked + .slider::before {
+  transform: translateX(30px);
+  background-color: var(--btn-dark);
+}
+
+.theme-switch .icon {
+  margin-left: 10px;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+}
+
+body.dark .theme-switch .icon {
   color: var(--text-light);
-  transition: all 0.3s ease;
 }
 
-.theme-toggle:hover {
-  transform: scale(1.1) rotate(30deg);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-body.dark .theme-toggle i {
-  color: var(--accent);
-}
-
-/* CARD CONTAINER */
+/* CONTAINER */
 .container {
-  background: var(--card-bg);
+  background: var(--card-light);
   border-radius: 20px;
-  border-color: black;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 600px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
   transition: all 0.5s ease;
+  border: 2px solid var(--primary);
 }
 
 body.dark .container {
   background: var(--card-dark);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--accent);
 }
 
 /* SCREENS */
@@ -105,21 +128,15 @@ body.dark .container {
 
 /* START SCREEN */
 #start-screen h1 {
-  color: var(--primary);
   font-size: 2.5rem;
+  color: var(--primary);
   margin-bottom: 20px;
-  font-weight: 700;
 }
 
 #start-screen p {
-  color: var(--text-dark);
-  margin-bottom: 30px;
   font-size: 1.1rem;
-}
-
-body.dark #start-screen p,
-body.dark .quiz-info {
-  color: var(--text-light);
+  margin-bottom: 30px;
+  color: inherit;
 }
 
 /* QUIZ SCREEN */
@@ -128,115 +145,107 @@ body.dark .quiz-info {
 }
 
 #question-text {
-  color: var(--primary);
   font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-weight: 600;
-  animation: slideDown 0.5s ease;
-}
-
-body.dark #question-text {
-  color: var(--accent);
 }
 
 .quiz-info {
   display: flex;
   justify-content: space-between;
-  color: var(--text-dark);
-  margin-bottom: 1.5rem;
   font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 .answers-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 25px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .answer-btn {
-  background-color: rgba(110, 69, 226, 0.1);
-  border: 2px solid rgba(110, 69, 226, 0.3);
+  padding: 14px 20px;
   border-radius: 12px;
-  padding: 1rem;
-  cursor: pointer;
-  text-align: left;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  background: #ffe0ea;
   color: var(--text-dark);
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
 }
 
 .answer-btn:hover {
-  background-color: rgba(110, 69, 226, 0.2);
-  transform: translateY(-2px);
+  background: #ffccd9;
+}
+
+body.dark .answer-btn {
+  background: #393a5e;
+  color: var(--text-light);
+}
+
+body.dark .answer-btn:hover {
+  background: #46487a;
 }
 
 .answer-btn.correct {
-  background-color: rgba(40, 167, 69, 0.2);
-  border-color: rgba(40, 167, 69, 0.5);
-  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-color: var(--correct);
+  color: var(--correct);
 }
 
 .answer-btn.incorrect {
-  background-color: rgba(220, 53, 69, 0.2);
-  border-color: rgba(220, 53, 69, 0.5);
-  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-color: var(--incorrect);
+  color: var(--incorrect);
 }
 
 /* PROGRESS BAR */
 .progress-bar {
   height: 8px;
-  background-color: rgba(110, 69, 226, 0.2);
+  background-color: #f3c6d3;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress {
   height: 100%;
-  background: var(--primary);
+  background-color: var(--primary);
   width: 0%;
-  transition: width 0.4s ease;
+  transition: width 0.3s ease;
+}
+
+body.dark .progress-bar {
+  background-color: #3e3f66;
 }
 
 body.dark .progress {
-  background: var(--accent);
+  background-color: var(--accent);
 }
 
 /* RESULT SCREEN */
 #result-screen h1 {
+  font-size: 2rem;
   color: var(--primary);
   margin-bottom: 20px;
 }
 
-body.dark #result-screen h1 {
-  color: var(--accent);
-}
-
 .result-info {
-  background-color: rgba(110, 69, 226, 0.1);
-  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
-  margin-bottom: 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
 body.dark .result-info {
-  background-color: rgba(255, 126, 179, 0.1);
-}
-
-.result-info p {
-  font-size: 1.2rem;
-  color: var(--text-dark);
-  font-weight: 500;
-}
-
-body.dark .result-info p {
-  color: var(--text-light);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 #result-message {
-  font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: var(--primary);
   margin-top: 10px;
 }
@@ -247,31 +256,26 @@ body.dark #result-message {
 
 /* BUTTONS */
 button {
-  background: var(--primary);
-  color: white;
+  background-color: var(--btn-light);
+  color: #fff;
   border: none;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
   border-radius: 12px;
-  padding: 15px 30px;
-  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 600;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 14px rgba(255, 92, 138, 0.4);
 }
 
 button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
-#start-btn,
-#restart-btn {
-  background: var(--primary);
-}
-
-body.dark #start-btn,
-body.dark #restart-btn {
-  background: var(--accent);
+body.dark button {
+  background-color: var(--btn-dark);
+  box-shadow: 0 6px 14px rgba(127, 90, 240, 0.4);
 }
 
 /* ANIMATIONS */
@@ -286,18 +290,7 @@ body.dark #restart-btn {
   }
 }
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE */
 @media (max-width: 500px) {
   .screen {
     padding: 30px 20px;
@@ -312,12 +305,17 @@ body.dark #restart-btn {
   }
 
   button {
-    padding: 12px 25px;
-    font-size: 1rem;
+    padding: 12px 24px;
+    font-size: 0.95rem;
   }
 
-  .theme-toggle {
-    width: 45px;
-    height: 45px;
+  .theme-switch .slider {
+    width: 50px;
+    height: 26px;
+  }
+
+  .theme-switch .slider::before {
+    width: 20px;
+    height: 20px;
   }
 }
